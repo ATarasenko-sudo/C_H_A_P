@@ -19,6 +19,7 @@ def enc_vals(linear, angular)
 def talker(linear, angular):
     rospy.init_node('enc_pub')
     pub = rospy.Publisher("encoder_data", Header)
+    
     msg = Header()
     msg.head.stamp = rospy.Time.now()
     msg.encoder_r = enc_r
