@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 
 
-def enc_vals(linear, angular)
+def w_vals(linear, angular)
     L = 20
     r = 5
     V = data.linear.x #or y
@@ -16,10 +16,11 @@ def enc_vals(linear, angular)
     return w_rl
 
 
-def talker(linear, angular):
+def talker(event, linear, angular):
     rospy.init_node('enc_pub')
     pub = rospy.Publisher("encoder_data", Header)
-    
+    omegi = w_vals(linear, angular)
+    dt = event.last_duration
     msg = Header()
     msg.head.stamp = rospy.Time.now()
     msg.encoder_r = enc_r
@@ -27,9 +28,11 @@ def talker(linear, angular):
     pub.publish(msg)
 
 
-def listener():
+def listener(event):
     rospy.init_node("listener")
-    sub = = rospy.Subscriber("cmd_vel",Twist, talker)
+    rospy.Timer(rospy.Duration(0.1), talker)
+    sub = rospy.Subscriber("cmd_vel",Twist, talker)
+
     
     rospy.spin()
 
