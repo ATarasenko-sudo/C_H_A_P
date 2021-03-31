@@ -5,7 +5,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 
 
-def enc_vals(data)
+def enc_vals(linear, angular)
     L = 20
     r = 5
     V = data.linear.x #or y
@@ -16,7 +16,7 @@ def enc_vals(data)
     return w_rl
 
 
-def talker(data):
+def talker(linear, angular):
     rospy.init_node('enc_pub')
     pub = rospy.Publisher("encoder_data", Header)
     msg = Header()
