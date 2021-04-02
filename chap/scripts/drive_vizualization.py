@@ -5,6 +5,7 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 from matplotlib.pyplot as plt
 import math
+import scipy.integrate as integrate
 
 r = 5
 L = 20
@@ -31,12 +32,13 @@ def listener(event):
     #Тут я начал реализовывать, но можно продолжить или вовсе переписать
     w_l = (enc_l-enc_l_previous)*(2*3.1415)/(4096*time)
     w_r = (enc_r-enc_r_previous)*(2*3.1415)/(4096*time)
-    w_l_for_integral = math.log(time)*(enc_l-enc_l_previous)*(2*3.1415)/4096
-    w_r_for_integral = math.log(time)*(enc_r-enc_r_previous)*(2*3.1415)/4096
 
+    V= r*(w_r + w_l )/2
+    Vx=lambda t: V*cos(teta)
+    x=integrate.quad(Vx, 0, time)
+    Vy=lambda t: V*sin(teta)
+    y=integrate.quad(Vy, 0, time)
 
-    angle =  -r*(w_l_for_integral + w_r_for_integral)/ L
-    linear = r*(w_r_for_integral - w_l_for_integral)/ 2
 
     #Здеась записываются значения для динамического графика
     x_vals.append(x)
