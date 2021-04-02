@@ -5,8 +5,8 @@ from geometry_msgs.msg import Twist
 from std_msgs.msg import Header
 
 #Симулируем угловую скорость с помощью апериодического звена
-def omega_simulation(angular, recent_vals=0, dt)
-    T = rospy.Time.now()
+def omega_simulation(angular, recent_vals, dt)
+    T = 20
     beta = dt/(3*T + dt)
     w = beta*recent_vals + (1-beta)*angular.z
     return w
@@ -31,16 +31,24 @@ def encode(Wrl):
 
 def talker(event, linear, angular):
     rospy.init_node('enc_pub')
-    pub = rospy.Publisher("encoder_data", Header)
+    
+
+    sub = rospy.Subscriber("recent_w", String)
+
+    recent_w = data.recent_w
 
     dt = event.last_duration()
-    omega_sim = omega_simulation(angular, dt)
+    omega_sim = omega_simulation(angular,recent_w dt)
     omega_rl = w_vals(linear, omega_sim)
     enc_vals = encode(omega_rl)
-    
     enc_r = enc_vals[0]
     enc_l = enc_vals[1]
+    
+    pub = rospy.Publisher("recent_w", string)
 
+    data.recent_w = omega_sim
+
+    pub = rospy.Publisher("encoder_data", Header)
     msg = Header()
     msg.head.stamp = rospy.Time.now()
     msg.encoder_r = enc_r
